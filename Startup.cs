@@ -29,6 +29,7 @@ namespace Teste_Frontend
 
             services.AddDbContext<Teste_FrontendContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Teste_FrontendContext")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

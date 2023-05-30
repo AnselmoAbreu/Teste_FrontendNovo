@@ -10,22 +10,22 @@ using Teste_Frontend.Models;
 
 namespace Teste_Frontend.Controllers
 {
-    public class ProdutoesController : Controller
+    public class ProdutosController : Controller
     {
         private readonly Teste_FrontendContext _context;
 
-        public ProdutoesController(Teste_FrontendContext context)
+        public ProdutosController(Teste_FrontendContext context)
         {
             _context = context;
         }
 
-        // GET: Produtoes
+        // GET: Produtos
         public async Task<IActionResult> Index()
         {
             return View(await _context.Produto.ToListAsync());
         }
 
-        // GET: Produtoes/Details/5
+        // GET: Produtos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,13 +43,13 @@ namespace Teste_Frontend.Controllers
             return View(produto);
         }
 
-        // GET: Produtoes/Create
+        // GET: Produtos/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Produtoes/Create
+        // POST: Produtos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -65,7 +65,7 @@ namespace Teste_Frontend.Controllers
             return View(produto);
         }
 
-        // GET: Produtoes/Edit/5
+        // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,7 +81,7 @@ namespace Teste_Frontend.Controllers
             return View(produto);
         }
 
-        // POST: Produtoes/Edit/5
+        // POST: Produtos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -116,7 +116,7 @@ namespace Teste_Frontend.Controllers
             return View(produto);
         }
 
-        // GET: Produtoes/Delete/5
+        // GET: Produtos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +134,7 @@ namespace Teste_Frontend.Controllers
             return View(produto);
         }
 
-        // POST: Produtoes/Delete/5
+        // POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
