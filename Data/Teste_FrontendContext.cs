@@ -15,5 +15,7 @@ namespace Teste_Frontend.Data
         }
 
         public DbSet<Teste_Frontend.Models.Produto> Produto { get; set; }
+
+        public DbSet<Teste_Frontend.Models.ProdutosViewModel> ProdutosViewModel { get; set; }
     }
 }

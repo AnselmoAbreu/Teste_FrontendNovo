@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Teste_Frontend.Data;
 using Teste_Frontend.Models;
 
@@ -14,15 +16,40 @@ namespace Teste_Frontend.Controllers
     {
         private readonly Teste_FrontendContext _context;
 
+        private readonly string ENDPOINT = "http://localhost:63960/v1/Produtos";
+        private readonly HttpClient httpClient = null;
+
         public ProdutosController(Teste_FrontendContext context)
         {
             _context = context;
+            httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(ENDPOINT);
         }
 
         // GET: Produtos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Produto.ToListAsync());
+            try
+            {
+                List<ProdutosViewModel> produtos = null;
+                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    produtos = JsonConvert.DeserializeObject<List<ProdutosViewModel>>(content);
+                }
+                else
+                {
+                    ModelState.AddModelError(null, "Erro ao processar a solicitação!");
+                }
+                return View(produtos);
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+            //return View(await _context.Produto.ToListAsync());
         }
 
         // GET: Produtos/Details/5
