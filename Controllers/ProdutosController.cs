@@ -85,18 +85,11 @@ namespace Teste_Frontend.Controllers
             try
             {
                 int id = produtos.id;
-
-                //string json = JsonConvert.SerializeObject(produtos);
-                //byte[] buffer = Encoding.UTF8.GetBytes(json);
-                //ByteArrayContent bytecontent = new ByteArrayContent(buffer);
-                //bytecontent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                                
-                //string url = ENDPOINT + "excluir";
-                string url = $"{ENDPOINT}alterar/id:int?id={id}";
+                string url = $"{ENDPOINT}excluir?id={id}";
 
                 HttpResponseMessage response = await httpClient.DeleteAsync(url);
-                //if (!response.IsSuccessStatusCode)
-                //    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+                if (!response.IsSuccessStatusCode)
+                    ModelState.AddModelError(null, "Erro ao processar a solicitação");
 
                 return RedirectToAction("Index");
             }
