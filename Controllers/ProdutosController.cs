@@ -8,6 +8,10 @@ using Newtonsoft.Json;
 using Teste_Frontend.Data;
 using Teste_Frontend.Models;
 
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
 namespace Teste_Frontend.Controllers
 {
     public class ProdutosController : Controller
@@ -29,6 +33,30 @@ namespace Teste_Frontend.Controllers
 
         #region Actions
         public async Task<IActionResult> Index()
+        {
+            try
+            {
+                List<ProdutosViewModel> produtos = null;
+                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    produtos = JsonConvert.DeserializeObject<List<ProdutosViewModel>>(content);
+                }
+                else
+                {
+                    ModelState.AddModelError(null, "Erro ao processar a solicitação!");
+                }
+                return View(produtos);
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> GerarPDF()
         {
             try
             {
