@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
@@ -32,6 +35,9 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
@@ -45,8 +51,8 @@
                 </td>
                 <td>
                     @*<a asp-action="Edit" asp-route-id="@item.id">Editar</a> |
-                    <a asp-action="Get" asp-route-id="@item.id">Detalhes</a> |
-                    <a asp-action="Delete" asp-route-id="@item.id">Apagar</a>*@
+                        <a asp-action="Get" asp-route-id="@item.id">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.id">Apagar</a>*@
 
                     @Html.ActionLink("Detalhes", "Get", new { id = item.id })
 

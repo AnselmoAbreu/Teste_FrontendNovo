@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Teste_Frontend.Data;
 using Teste_Frontend.Models;
@@ -15,17 +12,22 @@ namespace Teste_Frontend.Controllers
 {
     public class ProdutosController : Controller
     {
+        #region Propriedades
         private readonly Teste_FrontendContext _context;
         private readonly string ENDPOINT = "http://localhost:63960/v1/Produtos/";
         private readonly HttpClient httpClient = null;
+        #endregion
 
+        #region Construtores
         public ProdutosController(Teste_FrontendContext context)
         {
             _context = context;
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(ENDPOINT);
         }
+        #endregion
 
+        #region Actions
         public async Task<IActionResult> Index()
         {
             try
@@ -63,6 +65,46 @@ namespace Teste_Frontend.Controllers
                 throw ex;
             }
         }
+
+        public IActionResult Create()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([Bind("Nome,Descricao,Preco,Estoque")] ProdutosViewModel produtos)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(produtos);
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                ByteArrayContent bytecontent = new ByteArrayContent(buffer);
+                bytecontent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string url = ENDPOINT;
+                HttpResponseMessage response = await httpClient.PostAsync(url, bytecontent);
+                if(!response.IsSuccessStatusCode)
+                
+                    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region Métodos Auxiliares
         private async Task<ProdutosViewModel> Pesquisar(int id)
         {
             try
@@ -94,5 +136,6 @@ namespace Teste_Frontend.Controllers
                 throw ex;
             }
         }
+        #endregion
     }
 }

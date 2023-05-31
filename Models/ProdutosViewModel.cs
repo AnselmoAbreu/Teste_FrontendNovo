@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Teste_Frontend.Models
 {
@@ -10,16 +6,18 @@ namespace Teste_Frontend.Models
     {
         [Key]
 
+        [Display(Name = "Id")]
         public int id { get; set; }
 
         public string Nome { get; set; }
 
+        [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
+        [Display(Name = "Preço")]
         public decimal Preco { get; set; }
 
         public int Estoque { get; set; }
-
 
     }
 }
