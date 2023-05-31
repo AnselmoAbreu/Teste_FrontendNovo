@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.17">
       <PrivateAssets>all</PrivateAssets>
