@@ -50,11 +50,9 @@
                     @Html.DisplayFor(modelItem => item.Estoque)
                 </td>
                 <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.id">Editar</a> |
-                        <a asp-action="Get" asp-route-id="@item.id">Detalhes</a> |
-                        <a asp-action="Delete" asp-route-id="@item.id">Apagar</a>*@
-
-                    @Html.ActionLink("Detalhes", "Get", new { id = item.id })
+                    @Html.ActionLink("Detalhes", "Get", new { id = item.id }) |
+                    @Html.ActionLink("Editar", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("Excluir", "Delete", new { id = item.id })
 
                 </td>
             </tr>

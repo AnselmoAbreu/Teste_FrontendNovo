@@ -65,6 +65,84 @@ namespace Teste_Frontend.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                ProdutosViewModel result = await Pesquisar(id);
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([Bind("id,Nome,Descricao,Preco,Estoque")] ProdutosViewModel produtos)
+        {
+            try
+            {
+                int id = produtos.id;
+
+                //string json = JsonConvert.SerializeObject(produtos);
+                //byte[] buffer = Encoding.UTF8.GetBytes(json);
+                //ByteArrayContent bytecontent = new ByteArrayContent(buffer);
+                //bytecontent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                                
+                //string url = ENDPOINT + "excluir";
+                string url = $"{ENDPOINT}alterar/id:int?id={id}";
+
+                HttpResponseMessage response = await httpClient.DeleteAsync(url);
+                //if (!response.IsSuccessStatusCode)
+                //    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            try
+            {
+                ProdutosViewModel result = await Pesquisar(id);
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([Bind("id,Nome,Descricao,Preco,Estoque")] ProdutosViewModel produtos)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(produtos);
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                ByteArrayContent bytecontent = new ByteArrayContent(buffer);
+                bytecontent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                string url = ENDPOINT + "alterar";
+                HttpResponseMessage response = await httpClient.PutAsync(url, bytecontent);
+                if (!response.IsSuccessStatusCode)
+
+                    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                string mensagem = ex.Message;
+                throw ex;
+            }
+        }
 
         public IActionResult Create()
         {
@@ -90,8 +168,8 @@ namespace Teste_Frontend.Controllers
                 bytecontent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
                 string url = ENDPOINT;
                 HttpResponseMessage response = await httpClient.PostAsync(url, bytecontent);
-                if(!response.IsSuccessStatusCode)
-                
+                if (!response.IsSuccessStatusCode)
+
                     ModelState.AddModelError(null, "Erro ao processar a solicitação");
                 return RedirectToAction("Index");
             }
