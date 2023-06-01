@@ -72,39 +72,34 @@ namespace Teste_Frontend.Controllers
                     ModelState.AddModelError(null, "Erro ao processar a solicitação!");
                 }
 
-                // Crie um novo documento PDF
                 Document doc = new Document(PageSize.A4,20,20,20,20);
-
-                // Crie um objeto MemoryStream para armazenar o PDF
+                
                 MemoryStream stream = new MemoryStream();
 
-                // Crie um escritor PDF
 
                 PdfWriter writer = PdfWriter.GetInstance(doc, stream);
 
-                // Abra o documento
                 doc.Open();
 
-                // Adicione conteúdo ao documento
                 doc.Add(new Paragraph("Relatório de Produtos - " + DateTime.Now));
                 doc.Add(new Paragraph(" "));
 
+                Font Fonte = new Font(Font.FontFamily.TIMES_ROMAN);
+                Fonte.Size = 18;
+                Fonte.SetStyle(1); 
+
                 foreach (ProdutosViewModel produto in produtos)
                 {
-                    doc.Add(new Paragraph(produto.id + " " + produto.Nome + " " + produto.Descricao + " " + produto.Preco + " " + produto.Estoque));
+                    doc.Add(new Paragraph(produto.id + " - " + produto.Nome + " - " + produto.Descricao + " - " + produto.Preco + " - " + produto.Estoque));
 
                 }
 
-                // Feche o documento
                 doc.Close();
 
-                // Defina o tipo de conteúdo do retorno como "application/pdf"
                 HttpContext.Response.ContentType = "application/pdf";
 
-                // Defina o nome do arquivo de saída
                 HttpContext.Response.Headers.Add("content-disposition", "attachment;filename=Teste_Anselmo.pdf");
 
-                // Escreva o conteúdo do PDF no fluxo de resposta
                 HttpContext.Response.Body.WriteAsync(stream.GetBuffer(), 0, stream.GetBuffer().Length);
 
                 return new EmptyResult();
