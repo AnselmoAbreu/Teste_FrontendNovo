@@ -11,6 +11,7 @@ using Teste_Frontend.Models;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Drawing;
 
 namespace Teste_Frontend.Controllers
 {
@@ -69,37 +70,83 @@ namespace Teste_Frontend.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(null, "Erro ao processar a solicitação!");
+                    return new EmptyResult();
                 }
 
-                Document doc = new Document(PageSize.A4,20,20,20,20);
-                
+                Document doc = new Document(PageSize.A4, 10, 10, 10, 10);
                 MemoryStream stream = new MemoryStream();
-
-
                 PdfWriter writer = PdfWriter.GetInstance(doc, stream);
 
                 doc.Open();
 
-                doc.Add(new Paragraph("Relatório de Produtos - " + DateTime.Now));
+                BaseFont bfHeader = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+                Font header = new(bfHeader, 16, Font.BOLD, BaseColor.BLACK);
+
+                BaseFont bfLinha = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+                Font Linha = new(bfLinha, 11, Font.NORMAL, BaseColor.BLACK);
+
+                BaseFont bfNegrito = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+                Font Negrito = new(bfNegrito, 11, Font.BOLD, BaseColor.BLACK);
+
+                var paragrafo = new Paragraph("Relatório de Produtos - " + DateTime.Now, header);
+                paragrafo.Alignment = Element.ALIGN_CENTER;
+
+                doc.Add(paragrafo);
                 doc.Add(new Paragraph(" "));
 
-                Font Fonte = new Font(Font.FontFamily.TIMES_ROMAN);
-                Fonte.Size = 18;
-                Fonte.SetStyle(1); 
+                PdfPTable table = new PdfPTable(5);
+                table.TotalWidth = PageSize.A4.Width;
+                float[] widths = new float[] { 10, 30, 30, 15, 15 };
+                table.SetWidths(widths);
+                table.HorizontalAlignment = 1;
+                table.SpacingBefore = 20f;
+                table.SpacingAfter = 30f;
+
+                PdfPCell cell = new PdfPCell();
+                cell.Colspan = 5;
+                cell.Border = 0;
+                cell.HorizontalAlignment = 1;
+
+                PdfPCell _c = new PdfPCell();
+
+                _c = new PdfPCell(new Phrase("Id", Negrito)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_CENTER };
+                table.AddCell(_c);
+
+                _c = new PdfPCell(new Phrase("Nome", Negrito)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_LEFT };
+                table.AddCell(_c);
+
+                _c = new PdfPCell(new Phrase("Descrição", Negrito)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_LEFT };
+                table.AddCell(_c);
+
+                _c = new PdfPCell(new Phrase("Preço", Negrito)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_RIGHT };
+                table.AddCell(_c);
+
+                _c = new PdfPCell(new Phrase("Estoque", Negrito)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_RIGHT };
+                table.AddCell(_c);
 
                 foreach (ProdutosViewModel produto in produtos)
                 {
-                    doc.Add(new Paragraph(produto.id + " - " + produto.Nome + " - " + produto.Descricao + " - " + produto.Preco + " - " + produto.Estoque));
+                    _c = new PdfPCell(new Phrase(produto.id.ToString(), Linha)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_CENTER };
+                    table.AddCell(_c);
 
+                    _c = new PdfPCell(new Phrase(produto.Nome, Linha)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_LEFT };
+                    table.AddCell(_c);
+
+                    _c = new PdfPCell(new Phrase(produto.Descricao, Linha)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_LEFT };
+                    table.AddCell(_c);
+
+                    _c = new PdfPCell(new Phrase(produto.Preco.ToString(), Linha)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_RIGHT };
+                    table.AddCell(_c);
+
+                    _c = new PdfPCell(new Phrase(produto.Estoque.ToString(), Linha)) { VerticalAlignment = Element.ALIGN_MIDDLE, HorizontalAlignment = Element.ALIGN_RIGHT };
+                    table.AddCell(_c);
                 }
 
+                doc.Add(table);
                 doc.Close();
 
                 HttpContext.Response.ContentType = "application/pdf";
-
                 HttpContext.Response.Headers.Add("content-disposition", "attachment;filename=Teste_Anselmo.pdf");
-
                 HttpContext.Response.Body.WriteAsync(stream.GetBuffer(), 0, stream.GetBuffer().Length);
 
                 return new EmptyResult();
