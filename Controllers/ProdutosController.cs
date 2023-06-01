@@ -73,7 +73,7 @@ namespace Teste_Frontend.Controllers
                 }
 
                 // Crie um novo documento PDF
-                Document doc = new Document();
+                Document doc = new Document(PageSize.A4,20,20,20,20);
 
                 // Crie um objeto MemoryStream para armazenar o PDF
                 MemoryStream stream = new MemoryStream();
@@ -86,7 +86,7 @@ namespace Teste_Frontend.Controllers
                 doc.Open();
 
                 // Adicione conteúdo ao documento
-                doc.Add(new Paragraph("Relatório de Produtos"));
+                doc.Add(new Paragraph("Relatório de Produtos - " + DateTime.Now));
                 doc.Add(new Paragraph(" "));
 
                 foreach (ProdutosViewModel produto in produtos)
@@ -102,7 +102,7 @@ namespace Teste_Frontend.Controllers
                 HttpContext.Response.ContentType = "application/pdf";
 
                 // Defina o nome do arquivo de saída
-                HttpContext.Response.Headers.Add("content-disposition", "attachment;filename=test.pdf");
+                HttpContext.Response.Headers.Add("content-disposition", "attachment;filename=Teste_Anselmo.pdf");
 
                 // Escreva o conteúdo do PDF no fluxo de resposta
                 HttpContext.Response.Body.WriteAsync(stream.GetBuffer(), 0, stream.GetBuffer().Length);
