@@ -19,6 +19,7 @@ namespace Teste_Frontend.Models
 
         public decimal Preco { get; set; }
 
+        [Display(Name = "Estoque")]
         public int Estoque { get; set; }
     }
 }
